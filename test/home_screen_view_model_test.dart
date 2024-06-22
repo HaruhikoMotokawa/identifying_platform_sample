@@ -34,4 +34,26 @@ void main() {
       expect(result, 2);
     });
   });
+  group('testOnでテスト', () {
+    // testOn引数は結局のところテストの実行環境が引数だったら実行されるということ
+    // つまりPCがmacだったらmacOSでないと動かない
+    setUp(() {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    });
+
+    test(
+        'mac-osでテストするけど、'
+        'TargetPlatformは偽装できないので失敗',
+        testOn: 'mac-os', () {
+      final result = viewModel.generateNumberForPlatform();
+      expect(result, 2);
+    });
+    test(
+        'ioSでテストするけど、TargetPlatformが偽装されてるわけではないので、'
+        'そもそも動かないテスト',
+        testOn: 'ios', () {
+      final result = viewModel.generateNumberForPlatform();
+      expect(result, 2);
+    });
+  });
 }
